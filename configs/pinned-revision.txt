@@ -1,0 +1,10 @@
+Pinned protocol revision
+repo: https://github.com/postfiatorg/postfiatd
+commit: 0085a1ff885d6a446369cf73a4430f75af22be55
+commit date: 2026-10-10T18:53:26+02:00
+subject: Merge pull request #50 from postfiatorg/hotfix/upstream-hardening-1.0.9
+tag: v1.0.9
+live testnet build_version: 1.0.9 (see outputs/server_info.json)
+verification: git rev-parse HEAD in the local clone returns the commit above;
+every cited line number was checked with grep -n against this clone.
+Blob SHA-1 values for every cited file: fixtures/source-hashes.json.
