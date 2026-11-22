@@ -1,0 +1,70 @@
+{
+ "key_classes": [
+  {
+   "class": "Validator master key",
+   "role": "Permanent validator identity; signs manifests and revocations; node ID is derived from it",
+   "algorithm_live": "Ed25519 (25 of 25 live master keys)",
+   "algorithm_code": "Ed25519 or secp256k1 (publicKeyType accepts both; Manifest.cpp)",
+   "size_bytes": 33,
+   "storage_live": "validator-keys.json (per ValidatorKeyUpdate.md)",
+   "rotation": "Never rotated without losing the identity; a new master key is a new validator",
+   "loss_outcome": "UNRECOVERABLE (drill C)",
+   "compromise_outcome": "Revocation manifest seq 0xFFFFFFFF (drill E), then new identity"
+  },
+  {
+   "class": "Validator ephemeral signing key",
+   "role": "Signs validations; bound to the master key by the current manifest",
+   "algorithm_live": "secp256k1 compressed (25 of 25 live signing keys)",
+   "algorithm_code": "secp256k1 only, derived from the token's validation secret (ValidatorKeys.cpp)",
+   "size_bytes": 33,
+   "storage_live": "Inside the [validator_token] (base64) in postfiatd.cfg, plus the key file",
+   "rotation": "New manifest with sequence + 1, signed by the master key; propagates in minutes",
+   "loss_outcome": "RECOVERABLE by rotation (drill A)",
+   "compromise_outcome": "RECOVERABLE by rotation; stale manifests rejected (drill B)"
+  },
+  {
+   "class": "Validation seed (seed mode)",
+   "role": "Alternative to a token: a 16-byte seed in [validation_seed] generates the validator key",
+   "algorithm_live": "Not observable on the live UNL (all 25 validators publish manifests, i.e. token mode)",
+   "algorithm_code": "secp256k1 from the seed; master = signing = derived key; sequence 0 (ValidatorKeys.cpp)",
+   "size_bytes": 16,
+   "storage_live": "postfiatd.cfg [validation_seed]",
+   "rotation": "No rotation path: a new seed is a new identity",
+   "loss_outcome": "UNRECOVERABLE (same as master-key loss)",
+   "compromise_outcome": "No revocation path without a manifest; the key must be removed from trust by the publisher"
+  },
+  {
+   "class": "Validator-list publisher key",
+   "role": "Signs the validator list itself; nodes verify the VL signature against [validator_list_keys]",
+   "algorithm_live": "Ed25519 (publisher key ED3F1E0D...)",
+   "algorithm_code": "Ed25519 master + secp256k1 ephemeral (scripts/generate_vl.py)",
+   "size_bytes": 33,
+   "storage_live": "Publisher-held; single publisher for the testnet",
+   "rotation": "VL sequence must increase; nodes reject sequence <= current",
+   "loss_outcome": "UNRECOVERABLE for the publisher identity; nodes would need a new publisher key in config",
+   "compromise_outcome": "Attacker can publish a malicious VL until operators change the publisher key"
+  },
+  {
+   "class": "Node key (peer identity)",
+   "role": "There is NO separate node key in the pinned code: the node's peer identity is its validation key (nodeID = hash of the master public key)",
+   "algorithm_live": "Same as the validator master key",
+   "algorithm_code": "calcNodeID(masterKey) (ValidatorKeys.cpp; PublicKey.cpp)",
+   "size_bytes": 20,
+   "storage_live": "Derived at startup; not stored separately",
+   "rotation": "Follows the master key",
+   "loss_outcome": "Follows the master key",
+   "compromise_outcome": "Follows the master key"
+  },
+  {
+   "class": "Account keys (for contrast)",
+   "role": "Transaction signing keys; NOT validator keys, shown only to bound the inventory",
+   "algorithm_live": "Not measured in this pack (no account probes were made)",
+   "algorithm_code": "Ed25519 or secp256k1 (KeyType enum has exactly these two values)",
+   "size_bytes": 33,
+   "storage_live": "Account holder's wallet",
+   "rotation": "Regular-key / master-key rotation on ledger",
+   "loss_outcome": "Account-level; out of scope for this pack",
+   "compromise_outcome": "Account-level; out of scope for this pack"
+  }
+ ]
+}

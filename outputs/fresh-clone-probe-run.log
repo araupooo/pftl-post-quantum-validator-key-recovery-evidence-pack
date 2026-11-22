@@ -1,0 +1,19 @@
+probe_all.sh run start: 2026-11-22T20:26:17Z
+pack root: /tmp/pftl-keyrec-repro.a97Mrm/pack
+safety boundary: read-only queries only; no transactions, no flood traffic
+server_info.json -> 200 1.050339s sha256=4bfc98049bbec695cc60603441910b5e58c12354a710c36c7f7a101d1c75efca
+validated seq for numeric ledger fetch: 8279341
+ledger_current.json -> 200 0.999934s sha256=d907ea49343c39a610c44fb1b5adb5e6e0f2f618e2afad74d41b6e18bbdd8b0f
+ledger_closed.json -> 200 0.822484s sha256=204e37cb54af52733d99b79d8c59ebc58352bd52960fff8177869d5ac28a404c
+fee.json -> 200 0.839921s sha256=cf200ebc4f573b1287a939bd228b6f1f3c5f20379af57c5ff0cf3c720e9173c8
+feature_list.json -> 200 0.857067s sha256=70585f308ab55dfdc84093e95a21c3859099dcbf1c5b04f1f00cea3a6785984f
+server_state.json -> 200 0.877366s sha256=80eaab9583475efe4e4008391ba5e973b6f6525f1607723a4b28355cdb23cb25
+validators.json -> 403 0.900513s sha256=91268711f43361e9d094089486492db986d6413020b6763903eb4c3b473216b4
+peers.json -> 403 0.898704s sha256=91268711f43361e9d094089486492db986d6413020b6763903eb4c3b473216b4
+invalid_method.json -> 200 0.827047s sha256=e7b21b8092a7192fb17ab985ff2ebd3de10df4b395311385249fdea2acd17540
+testnet_vl.json -> 200 0.579738s 14781B sha256=5d4f5a18a18fead4105e5dc00cf7e11a71b9be4bc140357d1b4ea12116df59e7
+explorer_health.json -> 500 0.853807s 33B sha256=de52b25e91c4558119b2a577b3d20a808e2bbca0f33b2caf63f5e81325a6a3ab
+explorer_metrics.json -> 200 0.622578s 108B sha256=cafd29dba250425da17962b777c6efc6a2c10a27bb3058b44eeebffeb7991287
+postfiat_org.html -> 200 0.747516s 34713B sha256=d483e1d8ae39c2916fc70859699e364182e765ae931a890e1aee123a71aa91fe
+postfiat_whitepaper.html -> 200 0.598812s 163089B sha256=33b15b1a28f5ebdad68ccb3eeb719fc0e4738b8fe3e8ce89a5317143e7ba472c
+probe_all.sh run end: 2026-11-22T20:26:29Z
