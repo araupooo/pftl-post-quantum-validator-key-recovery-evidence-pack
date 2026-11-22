@@ -1,0 +1,16 @@
+recovery drill run start (LAB keys only, no live key material)
+openssl: OpenSSL 3.0.13 30 Jan 2024 (Library: OpenSSL 3.0.13 30 Jan 2024)
+  [A] Ephemeral signing-key loss (LAB keys, Ed25519 master / secp256k1 ephemeral, mirroring the live UNL key split)
+  [A] ephemeral secret deleted (simulated loss); master secret kept
+  [A] RECOVERED: new ephemeral key + manifest seq 2, validator identity (master key) unchanged
+  [B] Ephemeral signing-key compromise (rotation + stale rejection)
+  [B] RECOVERED: rotation to seq 2; stale seq-1 manifest rejected by the sequence rule (seq <= stored ignored)
+  [C] Master-key loss (unrecoverable by design)
+  [C] master secret deleted (simulated loss); no copy exists
+  [C] NOT RECOVERABLE: without the master secret no new manifest can be signed; the only path is a new validator identity (new master key, new VL entry)
+  [D] Node loss: validator-keys.json deleted on container restart; restore the master secret from 3-of-5 Shamir shares
+  [D] lab master secret sha256=e0ba5fe41ae3ffa7... split 3-of-5
+  [D] key file deleted (simulated container restart)
+  [D] RECOVERED: master secret rebuilt from shares 1, 3, 5 and verified by fingerprint
+  [E] Master-key compromise (revocation manifest seq 0xFFFFFFFF)
+  [E] REVOKED: revocation manifest seq 4294967295 authenticated by the master key; no further manifest for this master key can ever be accepted; the validator must re-onboard as a new identity

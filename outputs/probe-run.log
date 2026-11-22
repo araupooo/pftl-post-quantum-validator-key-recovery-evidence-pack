@@ -1,0 +1,19 @@
+probe_all.sh run start: 2026-11-22T20:14:13Z
+pack root: /home/hatch/workspace/goals/postfiat-task-node-connection/hidden_files/task-c8f7ecaead614c674a10ba75e7cf7f96/pack
+safety boundary: read-only queries only; no transactions, no flood traffic
+server_info.json -> 200 1.160997s sha256=33b89195a54484d9ef7bedb60ccdd1e1ba8f6d65b12dd07bf95472fb25bdd961
+validated seq for numeric ledger fetch: 8279102
+ledger_current.json -> 200 0.844585s sha256=9a830445243d32e77f392d00e3a39c9236aea55aaf4cb85dd18f9f7f6c6a9f66
+ledger_closed.json -> 200 0.907146s sha256=dbe29953f8e9217f3262d426c3b5027f87c780f74bc5b06e681e56e2aa6778f5
+fee.json -> 200 0.961584s sha256=503f1872a534aeeffaba27e56dca21a29958e9ef4b1009ff2712675cf9d2b332
+feature_list.json -> 200 1.095887s sha256=70585f308ab55dfdc84093e95a21c3859099dcbf1c5b04f1f00cea3a6785984f
+server_state.json -> 200 0.957373s sha256=0a657c33ec80a8fd7a8fe3c78b2ec91dd8b31aa52fd6f08174a5c59466a6df17
+validators.json -> 403 0.911269s sha256=91268711f43361e9d094089486492db986d6413020b6763903eb4c3b473216b4
+peers.json -> 403 0.990537s sha256=91268711f43361e9d094089486492db986d6413020b6763903eb4c3b473216b4
+invalid_method.json -> 200 0.925618s sha256=e7b21b8092a7192fb17ab985ff2ebd3de10df4b395311385249fdea2acd17540
+testnet_vl.json -> 200 0.702357s 14781B sha256=5d4f5a18a18fead4105e5dc00cf7e11a71b9be4bc140357d1b4ea12116df59e7
+explorer_health.json -> 500 0.853991s 33B sha256=de52b25e91c4558119b2a577b3d20a808e2bbca0f33b2caf63f5e81325a6a3ab
+explorer_metrics.json -> 200 0.585462s 108B sha256=cafd29dba250425da17962b777c6efc6a2c10a27bb3058b44eeebffeb7991287
+postfiat_org.html -> 200 0.664489s 34713B sha256=e42e5afc862952e78d2cd03e9a794ef01fef40d9e31ddfa3ea8ce43cc679f296
+postfiat_whitepaper.html -> 200 0.611037s 163089B sha256=33b15b1a28f5ebdad68ccb3eeb719fc0e4738b8fe3e8ce89a5317143e7ba472c
+probe_all.sh run end: 2026-11-22T20:14:26Z
