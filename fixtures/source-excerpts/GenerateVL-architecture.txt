@@ -1,0 +1,51 @@
+# Pinned source excerpt
+# repo: https://github.com/postfiatorg/postfiatd
+# commit: 0085a1ff885d6a446369cf73a4430f75af22be55
+# file: scripts/generate_vl.py
+# lines: 1-45 (1-based, verified with grep -n)
+# ----
+1: #!/usr/bin/env python3
+2: """
+3: Generate a signed Validator List (VL) JSON file for PostFiat networks.
+4: 
+5: A VL is a cryptographically signed JSON document that postfiatd nodes fetch
+6: to determine which validators to trust. Each node's [validator_list_keys]
+7: config holds the publisher's master public key, and the node verifies
+8: the VL signature against it before accepting the list.
+9: 
+10: Architecture:
+11:     Publisher key pair (generated once, stored securely):
+12:         - Master key (Ed25519): identifies the publisher in node configs
+13:         - Ephemeral signing key (secp256k1): signs the VL blob
+14:         - Manifest: binds master key to signing key, signed by both
+15:         - Token: contains the manifest + ephemeral secret key
+16: 
+17:     The VL JSON contains:
+18:         - The publisher's manifest (so nodes can extract the signing key)
+19:         - A base64-encoded blob (JSON with sequence, expiration, validators)
+20:         - A hex-encoded signature over the raw blob bytes
+21: 
+22:     Signing process (must match what postfiatd verifies):
+23:         1. Build inner blob as a JSON string
+24:         2. Sign the raw JSON bytes with SHA-512-Half + secp256k1 ECDSA
+25:         3. Base64-encode the same raw bytes for the output
+26:         4. Hex-encode the DER signature
+27: 
+28: Prerequisites:
+29:     pip3 install ecdsa
+30: 
+31: Usage:
+32:     1. Create a config file (see example below)
+33:     2. Run: python3 scripts/generate_vl.py config.json -o testnet_vl.json
+34:     3. Upload the output to the URL in [validator_list_sites]
+35: 
+36: Config file format:
+37:     {
+38:         "publisher_token": "<base64 from 'validator-keys create_token --keyfile publisher-keys.json'>",
+39:         "sequence": 1,
+40:         "expiration": "2027-06-01",
+41:         "validator_tokens": [
+42:             "<base64 token for validator 1>",
+43:             "<base64 token for validator 2>",
+44:             "<base64 token for validator 3>",
+45:             "<base64 token for validator 4>",

@@ -1,0 +1,24 @@
+# Pinned source excerpt
+# repo: https://github.com/postfiatorg/postfiatd
+# commit: 0085a1ff885d6a446369cf73a4430f75af22be55
+# file: include/xrpl/protocol/KeyType.h
+# lines: 28-45 (1-based, verified with grep -n)
+# ----
+28: enum class KeyType {
+29:     secp256k1 = 0,
+30:     ed25519 = 1,
+31: };
+32: 
+33: inline std::optional<KeyType>
+34: keyTypeFromString(std::string const& s)
+35: {
+36:     if (s == "secp256k1")
+37:         return KeyType::secp256k1;
+38: 
+39:     if (s == "ed25519")
+40:         return KeyType::ed25519;
+41: 
+42:     return {};
+43: }
+44: 
+45: inline char const*

@@ -1,0 +1,16 @@
+# Pinned source excerpt
+# repo: https://github.com/postfiatorg/postfiatd
+# commit: 0085a1ff885d6a446369cf73a4430f75af22be55
+# file: src/libxrpl/protocol/PublicKey.cpp
+# lines: 223-232 (1-based, verified with grep -n)
+# ----
+223: std::optional<KeyType>
+224: publicKeyType(Slice const& slice)
+225: {
+226:     if (slice.size() == 33)
+227:     {
+228:         if (slice[0] == 0xED)
+229:             return KeyType::ed25519;
+230: 
+231:         if (slice[0] == 0x02 || slice[0] == 0x03)
+232:             return KeyType::secp256k1;

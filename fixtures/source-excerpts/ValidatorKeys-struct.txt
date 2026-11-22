@@ -1,0 +1,33 @@
+# Pinned source excerpt
+# repo: https://github.com/postfiatorg/postfiatd
+# commit: 0085a1ff885d6a446369cf73a4430f75af22be55
+# file: src/xrpld/app/misc/ValidatorKeys.h
+# lines: 40-66 (1-based, verified with grep -n)
+# ----
+40:     // Group all keys in a struct. Either all keys are valid or none are.
+41:     struct Keys
+42:     {
+43:         PublicKey masterPublicKey;
+44:         PublicKey publicKey;
+45:         SecretKey secretKey;
+46: 
+47:         Keys() = delete;
+48:         Keys(
+49:             PublicKey const& masterPublic_,
+50:             PublicKey const& public_,
+51:             SecretKey const& secret_)
+52:             : masterPublicKey(masterPublic_)
+53:             , publicKey(public_)
+54:             , secretKey(secret_)
+55:         {
+56:         }
+57:     };
+58: 
+59:     // Note: The existence of keys cannot be used as a proxy for checking the
+60:     // validity of a configuration. It is possible to have a valid
+61:     // configuration while not setting the keys, as per the constructor of
+62:     // the ValidatorKeys class.
+63:     std::optional<Keys> keys;
+64:     NodeID nodeID;
+65:     std::string manifest;
+66:     std::uint32_t sequence = 0;

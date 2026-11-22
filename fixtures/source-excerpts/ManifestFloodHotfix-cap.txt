@@ -1,0 +1,46 @@
+# Pinned source excerpt
+# repo: https://github.com/postfiatorg/postfiatd
+# commit: 0085a1ff885d6a446369cf73a4430f75af22be55
+# file: docs/MANIFEST_FLOOD_HOTFIX.md
+# lines: 1-40 (1-based, verified with grep -n)
+# ----
+1: # Manifest flood hotfix (1.0.5 and 1.0.6, testnet/devnet)
+2: 
+3: ## 1.0.6: bounded unlisted manifests instead of rejecting them
+4: 
+5: 1.0.5 closed the flood by refusing every manifest whose master key is not on
+6: the validator list. That also stops the network from learning about
+7: validators that are not on the list yet, which the dynamic UNL needs: the
+8: scoring service asks an RPC node for each selected validator's manifest, so a
+9: node that never stored a candidate's manifest cannot be used to sign a list
+10: that adds that candidate. XRP Ledger hit the same problem with its 3.2.1
+11: hotfix and corrected it in 3.3.0. 1.0.6 follows that corrected design, with
+12: one deliberate difference: XRP Ledger rejects new unlisted keys once its bound
+13: is full, while 1.0.6 evicts the oldest unlisted entry instead, so a flood
+14: churns the set but can never leave the node blind to a newcomer until the
+15: next restart.
+16: 
+17: - Manifests from unlisted keys are admitted into a bounded set (default
+18:   1000 keys, `[overlay] max_untrusted_count`; 0 restores the 1.0.5
+19:   behaviour). When the set is full the oldest unlisted entry is evicted for
+20:   each new one, so a flood churns the set but never grows the cache. Listed
+21:   keys are never bounded or evicted; a key that becomes listed leaves the set.
+22: - Unlisted manifests are never written to `wallet.db`, revocations included.
+23:   A wallet that already holds flood entries from 1.0.4 or 1.0.5 is loaded once
+24:   more (uncapped, so listed manifests cannot be evicted by junk) and cleaned
+25:   at the next shutdown: **restart twice** after upgrading such a node.
+26: - The greeting sent to a new peer carries every listed key's manifest plus a
+27:   random subset of at most `max_untrusted_count` live unlisted ones, in the
+28:   same bounded batches as 1.0.5. Revocations of unlisted keys, the flood
+29:   payload, are never sent. Accepted unlisted manifests are relayed, so a new
+30:   validator's manifest still spreads through patched nodes.
+31: - Configured list publishers are persisted whatever their status, so a
+32:   publisher revocation still survives a restart.
+33: - Each received batch processes every listed manifest and at most
+34:   `max_untrusted_count` unlisted ones; the sender is charged for the rest.
+35: - Individual manifests are capped at 512 bytes (the largest the format can
+36:   legitimately carry, previously 4 KiB), so padding no longer works.
+37: - The legacy drain accepts one oversized 1.0.4 dump up to the 28-bit maximum
+38:   (256 MiB - 1) within 300 seconds, previously 128 MiB and 60 seconds.
+39: 
+40: Everything else from 1.0.5 (batch limits, chunked sync, non-throwing

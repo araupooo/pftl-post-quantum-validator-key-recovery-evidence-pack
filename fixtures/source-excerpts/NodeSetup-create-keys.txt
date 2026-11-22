@@ -1,0 +1,17 @@
+# Pinned source excerpt
+# repo: https://github.com/postfiatorg/postfiatd
+# commit: 0085a1ff885d6a446369cf73a4430f75af22be55
+# file: docs/NodeSetup.md
+# lines: 282-292 (1-based, verified with grep -n)
+# ----
+282: When first setting up a validator, use the `validator-keys` tool to generate
+283: its key pair:
+284: 
+285: ```
+286:   $ validator-keys create_keys
+287: ```
+288: 
+289: Sample output:
+290: ```
+291:   Validator keys stored in /root/.ripple/validator-keys.json
+292: ```

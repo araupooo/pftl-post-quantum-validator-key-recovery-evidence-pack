@@ -1,0 +1,26 @@
+# Pinned source excerpt
+# repo: https://github.com/postfiatorg/postfiatd
+# commit: 0085a1ff885d6a446369cf73a4430f75af22be55
+# file: docs/ValidatorKeyUpdate.md
+# lines: 205-224 (1-based, verified with grep -n)
+# ----
+205: > **CRITICAL: Backup Master Keys Before Docker Restart!**
+206: >
+207: > The `validator-keys.json` file contains your **master validator keys** and is stored inside the Docker container at `/root/.ripple/validator-keys.json`.
+208: >
+209: > **This file is deleted when the Docker container is restarted or recreated.**
+210: >
+211: > Before running `docker compose down` or `docker compose restart`:
+212: > 1. **Copy the file from the container to a secure location**:
+213: >    ```bash
+214: >    docker cp postfiatd:/root/.ripple/validator-keys.json ./validator-keys-backup.json
+215: >    ```
+216: > 2. **Store the backup in a secure, offline location** (encrypted USB drive, secure vault, etc.)
+217: > 3. **Never keep this file on the validator machine** after backing it up
+218: >
+219: > Without this backup, you will lose the ability to:
+220: > - Generate new validator tokens for your validator public key
+221: > - Update your validator domain
+222: > - Revoke your keys if compromised
+223: >
+224: > If you lose these master keys, you will need to create a completely new validator identity.

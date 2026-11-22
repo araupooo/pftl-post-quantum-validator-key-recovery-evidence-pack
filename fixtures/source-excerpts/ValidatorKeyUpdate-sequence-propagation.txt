@@ -1,0 +1,17 @@
+# Pinned source excerpt
+# repo: https://github.com/postfiatorg/postfiatd
+# commit: 0085a1ff885d6a446369cf73a4430f75af22be55
+# file: docs/ValidatorKeyUpdate.md
+# lines: 240-250 (1-based, verified with grep -n)
+# ----
+240: - Nodes on the network will automatically accept the new token if the sequence number is higher
+241: - Old tokens are automatically invalidated when a new token is published
+242: - There is a hard limit of 4,294,967,293 tokens per validator key pair
+243: 
+244: ### Propagation Time
+245: 
+246: - New tokens propagate through the network automatically
+247: - Other validators will detect and accept the new manifest within minutes
+248: - No coordination with other operators is required
+249: - The validator identity (master public key) remains unchanged
+250: 

@@ -1,0 +1,13 @@
+# Pinned source excerpt
+# repo: https://github.com/postfiatorg/postfiatd
+# commit: 0085a1ff885d6a446369cf73a4430f75af22be55
+# file: docs/ValidatorKeyUpdate.md
+# lines: 78-84 (1-based, verified with grep -n)
+# ----
+78: 
+79: You should generate a new validator token when:
+80: 
+81: - Rotating your signing key periodically as a security best practice (e.g., every 6-12 months)
+82: - You suspect the current signing key may have been compromised
+83: - Moving your validator to new hardware
+84: - Updating or setting your validator's domain

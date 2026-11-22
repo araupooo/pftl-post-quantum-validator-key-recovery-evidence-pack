@@ -1,0 +1,69 @@
+# Pinned source excerpt
+# repo: https://github.com/postfiatorg/postfiatd
+# commit: 0085a1ff885d6a446369cf73a4430f75af22be55
+# file: src/xrpld/app/misc/detail/ValidatorKeys.cpp
+# lines: 29-91 (1-based, verified with grep -n)
+# ----
+29: ValidatorKeys::ValidatorKeys(Config const& config, beast::Journal j)
+30: {
+31:     if (config.exists(SECTION_VALIDATOR_TOKEN) &&
+32:         config.exists(SECTION_VALIDATION_SEED))
+33:     {
+34:         configInvalid_ = true;
+35:         JLOG(j.fatal()) << "Cannot specify both [" SECTION_VALIDATION_SEED
+36:                            "] and [" SECTION_VALIDATOR_TOKEN "]";
+37:         return;
+38:     }
+39: 
+40:     if (config.exists(SECTION_VALIDATOR_TOKEN))
+41:     {
+42:         // token is non-const so it can be moved from
+43:         if (auto token = loadValidatorToken(
+44:                 config.section(SECTION_VALIDATOR_TOKEN).lines()))
+45:         {
+46:             auto const pk =
+47:                 derivePublicKey(KeyType::secp256k1, token->validationSecret);
+48:             auto const m = deserializeManifest(base64_decode(token->manifest));
+49: 
+50:             if (!m || pk != m->signingKey)
+51:             {
+52:                 configInvalid_ = true;
+53:                 JLOG(j.fatal())
+54:                     << "Invalid token specified in [" SECTION_VALIDATOR_TOKEN
+55:                        "]";
+56:             }
+57:             else
+58:             {
+59:                 keys.emplace(m->masterKey, pk, token->validationSecret);
+60:                 nodeID = calcNodeID(m->masterKey);
+61:                 sequence = m->sequence;
+62:                 manifest = std::move(token->manifest);
+63:             }
+64:         }
+65:         else
+66:         {
+67:             configInvalid_ = true;
+68:             JLOG(j.fatal())
+69:                 << "Invalid token specified in [" SECTION_VALIDATOR_TOKEN "]";
+70:         }
+71:     }
+72:     else if (config.exists(SECTION_VALIDATION_SEED))
+73:     {
+74:         auto const seed = parseBase58<Seed>(
+75:             config.section(SECTION_VALIDATION_SEED).lines().front());
+76:         if (!seed)
+77:         {
+78:             configInvalid_ = true;
+79:             JLOG(j.fatal())
+80:                 << "Invalid seed specified in [" SECTION_VALIDATION_SEED "]";
+81:         }
+82:         else
+83:         {
+84:             SecretKey const sk = generateSecretKey(KeyType::secp256k1, *seed);
+85:             PublicKey const pk = derivePublicKey(KeyType::secp256k1, sk);
+86:             keys.emplace(pk, pk, sk);
+87:             nodeID = calcNodeID(pk);
+88:             sequence = 0;
+89:         }
+90:     }
+91: }

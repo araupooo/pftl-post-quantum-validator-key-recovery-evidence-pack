@@ -1,0 +1,52 @@
+# Pinned source excerpt
+# repo: https://github.com/postfiatorg/postfiatd
+# commit: 0085a1ff885d6a446369cf73a4430f75af22be55
+# file: src/xrpld/app/misc/detail/Manifest.cpp
+# lines: 405-450 (1-based, verified with grep -n)
+# ----
+405:         -> std::optional<ManifestDisposition> {
+406:         XRPL_ASSERT(
+407:             lock.owns_lock(),
+408:             "ripple::ManifestCache::applyManifest::prewriteCheck : locked");
+409:         (void)lock;  // not used. parameter is present to ensure the mutex is
+410:                      // locked when the lambda is called.
+411:         if (iter != map_.end() && m.sequence <= iter->second.sequence)
+412:         {
+413:             // We received a manifest whose sequence number is not strictly
+414:             // greater than the one we already know about. This can happen in
+415:             // several cases including when we receive manifests from a peer who
+416:             // doesn't have the latest data.
+417:             if (auto stream = j_.debug())
+418:                 logMftAct(
+419:                     stream,
+420:                     "Stale",
+421:                     m.masterKey,
+422:                     m.sequence,
+423:                     iter->second.sequence);
+424:             return ManifestDisposition::stale;
+425:         }
+426: 
+427:         if (checkSignature && !m.verify())
+428:         {
+429:             if (auto stream = j_.warn())
+430:                 logMftAct(stream, "Invalid", m.masterKey, m.sequence);
+431:             return ManifestDisposition::invalid;
+432:         }
+433: 
+434:         // If the master key associated with a manifest is or might be
+435:         // compromised and is, therefore, no longer trustworthy.
+436:         //
+437:         // A manifest revocation essentially marks a manifest as compromised. By
+438:         // setting the sequence number to the highest value possible, the
+439:         // manifest is effectively neutered and cannot be superseded by a forged
+440:         // one.
+441:         bool const revoked = m.revoked();
+442: 
+443:         if (auto stream = j_.warn(); stream && revoked)
+444:             logMftAct(stream, "Revoked", m.masterKey, m.sequence);
+445: 
+446:         // Sanity check: the master key of this manifest should not be used as
+447:         // the ephemeral key of another manifest:
+448:         if (auto const x = signingToMasterKeys_.find(m.masterKey);
+449:             x != signingToMasterKeys_.end())
+450:         {

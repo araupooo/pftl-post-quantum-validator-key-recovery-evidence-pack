@@ -1,0 +1,14 @@
+# Pinned source excerpt
+# repo: https://github.com/postfiatorg/postfiatd
+# commit: 0085a1ff885d6a446369cf73a4430f75af22be55
+# file: src/xrpld/core/ConfigSections.h
+# lines: 89-96 (1-based, verified with grep -n)
+# ----
+89: #define SECTION_VALIDATION_SEED "validation_seed"
+90: #define SECTION_VALIDATOR_KEYS "validator_keys"
+91: #define SECTION_VALIDATOR_KEY_REVOCATION "validator_key_revocation"
+92: #define SECTION_VALIDATOR_LIST_KEYS "validator_list_keys"
+93: #define SECTION_VALIDATOR_LIST_SITES "validator_list_sites"
+94: #define SECTION_VALIDATOR_LIST_THRESHOLD "validator_list_threshold"
+95: #define SECTION_VALIDATORS "validators"
+96: #define SECTION_VALIDATOR_TOKEN "validator_token"

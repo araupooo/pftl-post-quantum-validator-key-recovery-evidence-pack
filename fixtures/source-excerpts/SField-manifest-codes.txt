@@ -1,0 +1,25 @@
+# Pinned source excerpt
+# repo: https://github.com/postfiatorg/postfiatd
+# commit: 0085a1ff885d6a446369cf73a4430f75af22be55
+# file: include/xrpl/protocol/detail/sfields.macro
+# lines: 289-307 (1-based, verified with grep -n)
+# ----
+289: TYPED_SFIELD(sfPublicKey,                VL,         1)
+290: TYPED_SFIELD(sfMessageKey,               VL,         2)
+291: TYPED_SFIELD(sfSigningPubKey,            VL,         3)
+292: TYPED_SFIELD(sfTxnSignature,             VL,         4, SField::sMD_Default, SField::notSigning)
+293: TYPED_SFIELD(sfURI,                      VL,         5)
+294: TYPED_SFIELD(sfSignature,                VL,         6, SField::sMD_Default, SField::notSigning)
+295: TYPED_SFIELD(sfDomain,                   VL,         7)
+296: TYPED_SFIELD(sfFundCode,                 VL,         8)
+297: TYPED_SFIELD(sfRemoveCode,               VL,         9)
+298: TYPED_SFIELD(sfExpireCode,               VL,        10)
+299: TYPED_SFIELD(sfCreateCode,               VL,        11)
+300: TYPED_SFIELD(sfMemoType,                 VL,        12)
+301: TYPED_SFIELD(sfMemoData,                 VL,        13)
+302: TYPED_SFIELD(sfMemoFormat,               VL,        14)
+303: 
+304: // variable length (uncommon)
+305: TYPED_SFIELD(sfFulfillment,              VL,        16)
+306: TYPED_SFIELD(sfCondition,                VL,        17)
+307: TYPED_SFIELD(sfMasterSignature,          VL,        18, SField::sMD_Default, SField::notSigning)

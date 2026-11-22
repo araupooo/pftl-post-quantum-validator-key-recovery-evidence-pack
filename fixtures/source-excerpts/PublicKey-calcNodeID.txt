@@ -1,0 +1,17 @@
+# Pinned source excerpt
+# repo: https://github.com/postfiatorg/postfiatd
+# commit: 0085a1ff885d6a446369cf73a4430f75af22be55
+# file: src/libxrpl/protocol/PublicKey.cpp
+# lines: 318-328 (1-based, verified with grep -n)
+# ----
+318: 
+319: NodeID
+320: calcNodeID(PublicKey const& pk)
+321: {
+322:     static_assert(NodeID::bytes == sizeof(ripesha_hasher::result_type));
+323: 
+324:     ripesha_hasher h;
+325:     h(pk.data(), pk.size());
+326:     return NodeID{static_cast<ripesha_hasher::result_type>(h)};
+327: }
+328: 

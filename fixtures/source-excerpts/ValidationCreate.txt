@@ -1,0 +1,45 @@
+# Pinned source excerpt
+# repo: https://github.com/postfiatorg/postfiatd
+# commit: 0085a1ff885d6a446369cf73a4430f75af22be55
+# file: src/xrpld/rpc/handlers/ValidationCreate.cpp
+# lines: 29-67 (1-based, verified with grep -n)
+# ----
+29: static std::optional<Seed>
+30: validationSeed(Json::Value const& params)
+31: {
+32:     if (!params.isMember(jss::secret))
+33:         return randomSeed();
+34: 
+35:     return parseGenericSeed(params[jss::secret].asString());
+36: }
+37: 
+38: // {
+39: //   secret: <string>   // optional
+40: // }
+41: //
+42: // This command requires Role::ADMIN access because it makes
+43: // no sense to ask an untrusted server for this.
+44: Json::Value
+45: doValidationCreate(RPC::JsonContext& context)
+46: {
+47:     Json::Value obj(Json::objectValue);
+48: 
+49:     auto seed = validationSeed(context.params);
+50: 
+51:     if (!seed)
+52:         return rpcError(rpcBAD_SEED);
+53: 
+54:     auto const private_key = generateSecretKey(KeyType::secp256k1, *seed);
+55: 
+56:     obj[jss::validation_public_key] = toBase58(
+57:         TokenType::NodePublic,
+58:         derivePublicKey(KeyType::secp256k1, private_key));
+59: 
+60:     obj[jss::validation_private_key] =
+61:         toBase58(TokenType::NodePrivate, private_key);
+62: 
+63:     obj[jss::validation_seed] = toBase58(*seed);
+64:     obj[jss::validation_key] = seedAs1751(*seed);
+65: 
+66:     return obj;
+67: }

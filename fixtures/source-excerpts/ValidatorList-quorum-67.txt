@@ -1,0 +1,24 @@
+# Pinned source excerpt
+# repo: https://github.com/postfiatorg/postfiatd
+# commit: 0085a1ff885d6a446369cf73a4430f75af22be55
+# file: src/xrpld/app/misc/detail/ValidatorList.cpp
+# lines: 1895-1912 (1-based, verified with grep -n)
+# ----
+1895:             return std::numeric_limits<std::size_t>::max();
+1896:     }
+1897: 
+1898:     // Use a 67% quorum to balance fork safety, liveness, and required UNL
+1899:     // overlap. Note: Original XRPL uses 80%, but this fork uses 67% for
+1900:     // devnet/testnet. For mainnet, this should be reverted to 80%.
+1901:     //
+1902:     // Theorem 8 of the Analysis of the XRP Ledger Consensus Protocol
+1903:     // (https://arxiv.org/abs/1802.07242) says:
+1904:     //     XRP LCP guarantees fork safety if Oi,j > nj/2 + ni − qi + ti,j
+1905:     //     for every pair of nodes Pi, Pj.
+1906:     //
+1907:     // ni: size of Pi's UNL
+1908:     // nj: size of Pj's UNL
+1909:     // Oi,j: number of validators in both UNLs
+1910:     // qi: validation quorum for Pi's UNL
+1911:     // ti, tj: maximum number of allowed Byzantine faults in Pi and Pj's
+1912:     // UNLs ti,j: min{ti, tj, Oi,j}

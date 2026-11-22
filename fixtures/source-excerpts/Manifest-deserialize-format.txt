@@ -1,0 +1,53 @@
+# Pinned source excerpt
+# repo: https://github.com/postfiatorg/postfiatd
+# commit: 0085a1ff885d6a446369cf73a4430f75af22be55
+# file: src/xrpld/app/misc/detail/Manifest.cpp
+# lines: 54-100 (1-based, verified with grep -n)
+# ----
+54: deserializeManifest(Slice s, beast::Journal journal)
+55: {
+56:     if (s.empty())
+57:         return std::nullopt;
+58: 
+59:     static SOTemplate const manifestFormat{
+60:         // A manifest must include:
+61:         // - the master public key
+62:         {sfPublicKey, soeREQUIRED},
+63: 
+64:         // - a signature with that public key
+65:         {sfMasterSignature, soeREQUIRED},
+66: 
+67:         // - a sequence number
+68:         {sfSequence, soeREQUIRED},
+69: 
+70:         // It may, optionally, contain:
+71:         // - a version number which defaults to 0
+72:         {sfVersion, soeDEFAULT},
+73: 
+74:         // - a domain name
+75:         {sfDomain, soeOPTIONAL},
+76: 
+77:         // - an ephemeral signing key that can be changed as necessary
+78:         {sfSigningPubKey, soeOPTIONAL},
+79: 
+80:         // - a signature using the ephemeral signing key, if it is present
+81:         {sfSignature, soeOPTIONAL},
+82:     };
+83: 
+84:     try
+85:     {
+86:         SerialIter sit{s};
+87:         STObject st{sit, sfGeneric};
+88: 
+89:         st.applyTemplate(manifestFormat);
+90: 
+91:         // We only understand "version 0" manifests at this time:
+92:         if (st.isFieldPresent(sfVersion) && st.getFieldU16(sfVersion) != 0)
+93:             return std::nullopt;
+94: 
+95:         auto const pk = st.getFieldVL(sfPublicKey);
+96: 
+97:         if (!publicKeyType(makeSlice(pk)))
+98:             return std::nullopt;
+99: 
+100:         PublicKey const masterKey = PublicKey(makeSlice(pk));
