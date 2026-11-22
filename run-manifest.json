@@ -1,0 +1,65 @@
+{
+ "pack": "PFTL post-quantum validator key recovery evidence pack",
+ "generated_at_utc": "2026-11-22T20:19:58Z",
+ "probe_window_utc": "2026-11-22T20:14:13Z to 2026-11-22T20:14:26Z",
+ "environment": {
+  "python": "3.12.3",
+  "tools": "curl, git, python3 (stdlib only), openssl 3.0.13",
+  "network": "public endpoints only; no credentials, sessions, accounts, or signing of live material"
+ },
+ "repo_pins": {
+  "postfiatd": "0085a1ff885d6a446369cf73a4430f75af22be55 (2026-10-10, PR #50 merge, v1.0.9)"
+ },
+ "live_endpoints": [
+  "https://rpc.testnet.postfiat.org/ (postfiatd 1.0.9, network_id 2025)",
+  "https://postfiat.org/testnet_vl.json",
+  "https://explorer.testnet.postfiat.org/api/v1/ (health HTTP 500 at probe time)",
+  "https://postfiat.org/ and https://postfiat.org/whitepaper/ (Sept 2026)"
+ ],
+ "live_measurements": {
+  "validated_ledger_seq": 8279102,
+  "validators": 25,
+  "unl_size": 25,
+  "validation_quorum": 17,
+  "peers": 21,
+  "build_version": "1.0.9",
+  "network_id": 2025,
+  "vl_blob_sequence": 30,
+  "vl_effective_iso": "2026-11-17T20:10:08+00:00",
+  "vl_expiration_iso": "2028-03-31T16:14:53+00:00",
+  "explorer_health": "{\"message\":\"rippled unreachable\"}"
+ },
+ "drill": {
+  "scenarios_run": 5,
+  "recovered": 3,
+  "not_recoverable": 1,
+  "revoked": 1
+ },
+ "counts": {
+  "findings_total": 12,
+  "by_severity": {
+   "HIGH": 4,
+   "MEDIUM": 5,
+   "LOW": 2,
+   "INFO": 1
+  },
+  "by_status": {
+   "MEASURED": 9,
+   "SPECIFIED": 3
+  },
+  "claims_total": 37,
+  "claims_by_status": {
+   "VERIFIED": 16,
+   "SPECIFIED": 17,
+   "UNVERIFIED": 2,
+   "UNTESTABLE": 2
+  },
+  "risks_total": 14
+ },
+ "verdict": "NOT READY \u2014 ephemeral-key recovery works by design; master-key recovery does not exist; no quantum-resistant path.",
+ "notes": [
+  "Assessment + lab drills only: no live key material was used, no transactions sent, no flood traffic, no mainnet touched, nothing signed on the live network.",
+  "All drill keys are freshly generated LAB keys, wiped after the run; only public keys, fingerprints, and timings are recorded.",
+  "Live values were re-probed for this pack; no numbers were copied from earlier packs."
+ ]
+}
