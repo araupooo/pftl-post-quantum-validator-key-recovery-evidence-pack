@@ -1,0 +1,107 @@
+{
+ "drill": "post-quantum validator key recovery (LAB)",
+ "scenarios": [
+  {
+   "scenario": "A",
+   "name": "Ephemeral signing-key loss",
+   "outcome": "RECOVERED: new ephemeral key + manifest seq 2, validator identity (master key) unchanged",
+   "total_seconds": 0.102,
+   "steps": [
+    {
+     "step": "generate lab master keypair (Ed25519)",
+     "seconds": 0.0116
+    },
+    {
+     "step": "generate lab ephemeral keypair (secp256k1)",
+     "seconds": 0.0114
+    },
+    {
+     "step": "build manifest seq 1",
+     "seconds": 0.0124
+    },
+    {
+     "step": "verify manifest seq 1 signatures",
+     "seconds": 0.0219
+    },
+    {
+     "step": "generate replacement ephemeral keypair",
+     "seconds": 0.0113
+    },
+    {
+     "step": "build manifest seq 2 (rotation)",
+     "seconds": 0.0119
+    },
+    {
+     "step": "verify manifest seq 2 signatures",
+     "seconds": 0.0214
+    }
+   ],
+   "master_public_key_sha256": "08878c3684ee960df7b29ccd23f8065b627f1cd34de580b34f1423fd1c7aabd2",
+   "old_signing_key_sha256": "9d7fc112a9c1851c31a04c9f119d7737a24d952a679059efef9a869a12bded69",
+   "new_signing_key_sha256": "94c208dc45e2ae8b8969b77e8f7832cf9a09695bb23d9b391beab6a0089b844a",
+   "sequences": [
+    1,
+    2
+   ]
+  },
+  {
+   "scenario": "B",
+   "name": "Ephemeral signing-key compromise",
+   "outcome": "RECOVERED: rotation to seq 2; stale seq-1 manifest rejected by the sequence rule (seq <= stored ignored)",
+   "total_seconds": 0.078,
+   "stale_manifest_accepted": false,
+   "master_public_key_sha256": "577dc91ab5b65f3fec2b03a3306ec70558c44bff4349952debf22952c21ca608",
+   "compromised_signing_key_sha256": "ea24855158598412c4dbae004f4dfc0a8ec8d24d920f33d84378d5a470340cb5",
+   "new_signing_key_sha256": "2f217a7ff912e44a15fd1d3fdaa08be5afd6d3057428b1b026667512be122a30",
+   "sequences": [
+    1,
+    2
+   ]
+  },
+  {
+   "scenario": "C",
+   "name": "Master-key loss",
+   "outcome": "NOT RECOVERABLE: without the master secret no new manifest can be signed; the only path is a new validator identity (new master key, new VL entry)",
+   "rotation_possible_without_master_secret": false,
+   "new_identity_lab_seconds": 0.036,
+   "total_seconds": 0.113,
+   "lost_master_key_sha256": "c0eae9d4702b1a1cd7ca2290603dff2e55dd59dc86315f2e8542a5ce71d6d7f3",
+   "new_master_key_sha256": "ccffe09ac83d0452f3d47f8c493825d616c30edd6ec284e24bd71e7637b81664",
+   "network_side_cost": "SPECIFIED (not measured in lab): new VL publication with a higher sequence, operator coordination, and trust re-establishment; see docs/runbook.md"
+  },
+  {
+   "scenario": "D",
+   "name": "Node loss + Shamir restore (3-of-5)",
+   "outcome": "RECOVERED: master secret rebuilt from shares 1, 3, 5 and verified by fingerprint",
+   "total_seconds": 0.001,
+   "restore_seconds": 0.0001,
+   "master_secret_sha256": "e0ba5fe41ae3ffa7796619975a5f2628b8b6d7c9da56d3ed885df297ccb3e49b",
+   "share_commitments_sha256": [
+    "1d39438f32fa82880524aaf1dfd90dc1b7aaac6a9e80f3cc8189a83b3a0d42aa",
+    "4fff28d93d84d094933f4b02f0732e112960fc4e45b67fa07efb3c207dc5f5d2",
+    "c3891a566deac90df04188ece982bcd3ef308a983b6c399799d8d27d285a065b",
+    "fddd3ceeea3e276910eb5c72119b34ead210744889f521f2748f14b7575c49c1",
+    "02cb2fe5039560a2384920dd39812bf26854e979b3d70fa2f4ce2952e12acfd0"
+   ],
+   "failure_modes": {
+    "two_shares_insufficient": true,
+    "corrupted_share_detected_by_commitment": true
+   }
+  },
+  {
+   "scenario": "E",
+   "name": "Master-key compromise",
+   "outcome": "REVOKED: revocation manifest seq 4294967295 authenticated by the master key; no further manifest for this master key can ever be accepted; the validator must re-onboard as a new identity",
+   "total_seconds": 0.052,
+   "revocation_sequence": 4294967295,
+   "further_manifest_possible": false,
+   "master_public_key_sha256": "fbdd27e86918ecdc95bced0d900560d05036ac85fd52a423b3a4e9caf41a6de7",
+   "revoked_signing_key_sha256": "ed14a75ef85486b9e7d7310cc30d4182aa86eb6dd8c1ac1e41e549ceb5683abb"
+  }
+ ],
+ "scenarios_run": 5,
+ "recovered": 3,
+ "not_recoverable": 1,
+ "revoked": 1,
+ "model_note": "Manifests in this drill are LAB MODELS (JSON with the same fields as a real manifest), not byte-exact postfiatd STObject manifests. Real-manifest parsing is verified separately against the live VL."
+}

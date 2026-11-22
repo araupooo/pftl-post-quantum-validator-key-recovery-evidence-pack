@@ -1,0 +1,174 @@
+{
+ "algorithms": {
+  "ed25519": {
+   "public_key": 32,
+   "secret_key": 32,
+   "signature": 64,
+   "source": "RFC 8032 sections 5.1.5-5.1.6: public key 32 octets, signature 64 octets; ~128-bit security (section 2)."
+  },
+  "secp256k1": {
+   "public_key": 33,
+   "secret_key": 32,
+   "signature": 72,
+   "source": "Pinned postfiatd: 33-byte compressed public keys (PublicKey.cpp publicKeyType); DER ECDSA signatures up to 72 bytes (SecretKey.cpp sign). 128-bit classical security assumed; no standard sizes table cited."
+  },
+  "ML-DSA-44": {
+   "public_key": 1312,
+   "secret_key": 2560,
+   "signature": 2420,
+   "source": "NIST FIPS 204 Table 2 (verified against the NIST PDF); category 2."
+  },
+  "ML-DSA-65": {
+   "public_key": 1952,
+   "secret_key": 4032,
+   "signature": 3309,
+   "source": "NIST FIPS 204 Table 2 (verified against the NIST PDF); category 3. Named by the Post Fiat whitepaper section 1.11 as the genesis validator signature scheme."
+  },
+  "ML-DSA-87": {
+   "public_key": 2592,
+   "secret_key": 4896,
+   "signature": 4627,
+   "source": "NIST FIPS 204 Table 2 (verified against the NIST PDF); category 5."
+  },
+  "SLH-DSA-128s": {
+   "public_key": 32,
+   "secret_key": 64,
+   "signature": 7856,
+   "source": "NIST FIPS 205 Table 2 (verified against the NIST PDF); category 1, small-signature tuning."
+  },
+  "SLH-DSA-128f": {
+   "public_key": 32,
+   "secret_key": 64,
+   "signature": 17088,
+   "source": "NIST FIPS 205 Table 2; category 1, fast-signing tuning."
+  },
+  "SLH-DSA-192s": {
+   "public_key": 48,
+   "secret_key": 96,
+   "signature": 16224,
+   "source": "NIST FIPS 205 Table 2; category 3, small-signature tuning."
+  },
+  "SLH-DSA-256s": {
+   "public_key": 64,
+   "secret_key": 128,
+   "signature": 29792,
+   "source": "NIST FIPS 205 Table 2; category 5, small-signature tuning."
+  },
+  "SLH-DSA-256f": {
+   "public_key": 64,
+   "secret_key": 128,
+   "signature": 49856,
+   "source": "NIST FIPS 205 Table 2; category 5, fast-signing tuning."
+  }
+ },
+ "live_inputs": {
+  "unl_size": 25,
+  "manifest_bytes_min": 225,
+  "manifest_bytes_max": 246,
+  "manifest_cap_bytes": 512,
+  "manifest_headroom_bytes": 266
+ },
+ "manifest_fit": [
+  {
+   "algorithm": "ed25519",
+   "signature_bytes": 64,
+   "fits_manifest_cap_512": true,
+   "cap_overflow_bytes": 0,
+   "cap_overflow_factor": 0.12
+  },
+  {
+   "algorithm": "secp256k1",
+   "signature_bytes": 72,
+   "fits_manifest_cap_512": true,
+   "cap_overflow_bytes": 0,
+   "cap_overflow_factor": 0.14
+  },
+  {
+   "algorithm": "ML-DSA-44",
+   "signature_bytes": 2420,
+   "fits_manifest_cap_512": false,
+   "cap_overflow_bytes": 1908,
+   "cap_overflow_factor": 4.73
+  },
+  {
+   "algorithm": "ML-DSA-65",
+   "signature_bytes": 3309,
+   "fits_manifest_cap_512": false,
+   "cap_overflow_bytes": 2797,
+   "cap_overflow_factor": 6.46
+  },
+  {
+   "algorithm": "ML-DSA-87",
+   "signature_bytes": 4627,
+   "fits_manifest_cap_512": false,
+   "cap_overflow_bytes": 4115,
+   "cap_overflow_factor": 9.04
+  },
+  {
+   "algorithm": "SLH-DSA-128s",
+   "signature_bytes": 7856,
+   "fits_manifest_cap_512": false,
+   "cap_overflow_bytes": 7344,
+   "cap_overflow_factor": 15.34
+  },
+  {
+   "algorithm": "SLH-DSA-128f",
+   "signature_bytes": 17088,
+   "fits_manifest_cap_512": false,
+   "cap_overflow_bytes": 16576,
+   "cap_overflow_factor": 33.38
+  },
+  {
+   "algorithm": "SLH-DSA-192s",
+   "signature_bytes": 16224,
+   "fits_manifest_cap_512": false,
+   "cap_overflow_bytes": 15712,
+   "cap_overflow_factor": 31.69
+  },
+  {
+   "algorithm": "SLH-DSA-256s",
+   "signature_bytes": 29792,
+   "fits_manifest_cap_512": false,
+   "cap_overflow_bytes": 29280,
+   "cap_overflow_factor": 58.19
+  },
+  {
+   "algorithm": "SLH-DSA-256f",
+   "signature_bytes": 49856,
+   "fits_manifest_cap_512": false,
+   "cap_overflow_bytes": 49344,
+   "cap_overflow_factor": 97.38
+  }
+ ],
+ "quorum": {
+  "unl_size": 25,
+  "quorum_67pct": 17,
+  "quorum_80pct": 20,
+  "max_simultaneous_outages_at_67pct": 8,
+  "max_simultaneous_outages_at_80pct": 5
+ },
+ "sequence_budget": {
+  "one_rotation_per_6_months": {
+   "token_sequence_limit": 4294967293,
+   "rotations_per_year": 2,
+   "years_of_rotations_supported": 2147483646.5
+  },
+  "one_rotation_per_year": {
+   "token_sequence_limit": 4294967293,
+   "rotations_per_year": 1,
+   "years_of_rotations_supported": 4294967293.0
+  },
+  "one_rotation_per_month": {
+   "token_sequence_limit": 4294967293,
+   "rotations_per_year": 12,
+   "years_of_rotations_supported": 357913941.0833333
+  }
+ },
+ "whitepaper_quorum_bytes": {
+  "validators": 35,
+  "quorum": 24,
+  "signature_bytes_each": 3309,
+  "quorum_signature_bytes": 79416,
+  "note": "Whitepaper section 1.11 arithmetic, recomputed and confirmed: 24 x 3309 = 79,416 signature bytes per quorum set, before identifiers and framing."
+ }
+}
