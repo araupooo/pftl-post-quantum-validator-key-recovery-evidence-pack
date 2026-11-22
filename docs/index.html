@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>PFTL Post-Quantum Validator Key Recovery — Results</title>
+<style>
+body { font-family: system-ui, sans-serif; max-width: 900px; margin: 2em auto; padding: 0 1em; color: #1a1a1a; }
+h1 { font-size: 1.6em; } h2 { font-size: 1.2em; margin-top: 1.8em; }
+table { border-collapse: collapse; width: 100%; margin: 0.5em 0; }
+th, td { border: 1px solid #ccc; padding: 0.4em 0.6em; text-align: left; font-size: 0.92em; }
+th { background: #f0f0f0; }
+.verdict { background: #fff3e0; border-left: 4px solid #e65100; padding: 0.8em 1em; }
+code { background: #f5f5f5; padding: 0 0.3em; }
+.sev-HIGH { color: #b71c1c; font-weight: bold; } .sev-MEDIUM { color: #e65100; font-weight: bold; }
+.sev-LOW { color: #33691e; } .sev-INFO { color: #555; }
+</style>
+</head>
+<body>
+<h1>PFTL Post-Quantum Validator Key Recovery — Results</h1>
+<p>Live testnet (network 2025, postfiatd 1.0.9), probed 2026-11-22 20:14 UTC.
+Validated ledger seq 8,279,102. Pinned postfiatd commit
+<code>0085a1ff885d6a446369cf73a4430f75af22be55</code>.</p>
+
+<div class="verdict">
+<strong>Verdict: NOT READY — ephemeral-key recovery works by design;
+master-key recovery does not exist; no quantum-resistant path.</strong>
+Rotating a lost or compromised ephemeral signing key is a solved problem
+(new manifest, sequence + 1, propagates in minutes) and the drill recovers
+it in 0.1&nbsp;s of lab time. Losing the master key is unrecoverable by
+design: no new manifest can be signed and the only path is a brand-new
+validator identity. The documented backup is a single file
+(<code>validator-keys.json</code>) that is deleted on container restart,
+with no threshold scheme anywhere in the code or docs. The whitepaper
+promises ML-DSA-65 validator signatures from genesis; the pinned code has
+none, every live validator key is classical, and an ML-DSA-65 signature
+(3,309 bytes) cannot fit the 512-byte manifest cap.
+</div>
+
+<h2>Live validator set (measured)</h2>
+<table>
+<tr><th>Measurement</th><th>Value</th></tr>
+<tr><td>Validators in the live list</td><td>25</td></tr>
+<tr><td>Master keys Ed25519 / secp256k1</td><td>25 / 0</td></tr>
+<tr><td>Ephemeral signing keys Ed25519 / secp256k1</td><td>0 / 25</td></tr>
+<tr><td>VL key is the master key</td><td>25 / 25</td></tr>
+<tr><td>Manifest sequences</td><td>1–13; 10 of 25 at sequence 1 (never rotated)</td></tr>
+<tr><td>Manifest sizes</td><td>225–246 bytes (cap 512)</td></tr>
+<tr><td>VL blob sequence / effective / expiration</td><td>30 / 2026-11-17 / 2028-03-31</td></tr>
+<tr><td>Validation quorum</td><td>17 of 25 (67%)</td></tr>
+<tr><td>Explorer health endpoint</td><td>HTTP 500 “rippled unreachable”</td></tr>
+</table>
+
+<h2>Recovery drills (lab, freshly generated keys)</h2>
+<table>
+<tr><th>Scenario</th><th>Outcome</th><th>Lab time</th></tr>
+<tr><td>A. Ephemeral signing-key loss</td><td>RECOVERED — rotation to manifest seq 2</td><td>0.102 s</td></tr>
+<tr><td>B. Ephemeral signing-key compromise</td><td>RECOVERED — stale seq-1 manifest rejected</td><td>0.078 s</td></tr>
+<tr><td>C. Master-key loss</td><td>NOT RECOVERABLE — new identity only</td><td>0.113 s</td></tr>
+<tr><td>D. Node loss + 3-of-5 Shamir restore</td><td>RECOVERED — fingerprint verified</td><td>0.001 s</td></tr>
+<tr><td>E. Master-key compromise</td><td>REVOKED — seq 0xFFFFFFFF</td><td>0.052 s</td></tr>
+</table>
+
+<h2>Findings (12)</h2>
+<table>
+<tr><th>ID</th><th>Severity</th><th>Status</th><th>Finding</th></tr>
+<tr><td>F-01</td><td class="sev-HIGH">HIGH</td><td>MEASURED</td><td>Master-key loss is unrecoverable by design</td></tr>
+<tr><td>F-02</td><td class="sev-HIGH">HIGH</td><td>MEASURED</td><td>No post-quantum signature support in the pinned code</td></tr>
+<tr><td>F-03</td><td class="sev-HIGH">HIGH</td><td>SPECIFIED</td><td>validator-keys.json is deleted on container restart</td></tr>
+<tr><td>F-04</td><td class="sev-HIGH">HIGH</td><td>MEASURED</td><td>Post-quantum signatures cannot fit the 512-byte manifest cap</td></tr>
+<tr><td>F-05</td><td class="sev-MEDIUM">MEDIUM</td><td>MEASURED</td><td>Passphrase-derived seeds are brute-forceable</td></tr>
+<tr><td>F-06</td><td class="sev-MEDIUM">MEDIUM</td><td>MEASURED</td><td>[validation_seed] mode collapses the identity to one key</td></tr>
+<tr><td>F-07</td><td class="sev-MEDIUM">MEDIUM</td><td>MEASURED</td><td>No Shamir/threshold backup exists in the pinned code or docs</td></tr>
+<tr><td>F-08</td><td class="sev-MEDIUM">MEDIUM</td><td>SPECIFIED</td><td>Revocation depends on the master key surviving</td></tr>
+<tr><td>F-09</td><td class="sev-MEDIUM">MEDIUM</td><td>MEASURED</td><td>The whole UNL identity layer is classical</td></tr>
+<tr><td>F-10</td><td class="sev-LOW">LOW</td><td>MEASURED</td><td>A single VL publisher key is the trust root for the UNL</td></tr>
+<tr><td>F-11</td><td class="sev-LOW">LOW</td><td>SPECIFIED</td><td>Rotation guidance is advisory and mostly unfollowed</td></tr>
+<tr><td>F-12</td><td class="sev-INFO">INFO</td><td>MEASURED</td><td>Quorum tolerates 8 simultaneous validator outages</td></tr>
+</table>
+
+<h2>Documents</h2>
+<ul>
+<li><a href="methodology.md">Methodology</a> — safety boundary, methods, limitations</li>
+<li><a href="key-inventory.md">Key inventory</a> — six key classes, live inventory</li>
+<li><a href="backup-spec.md">Backup specification</a> — Shamir 3-of-5, offline storage, access control</li>
+<li><a href="recovery-drill.md">Recovery drill</a> — five scenarios, timings, failure modes</li>
+<li><a href="runbook.md">Disaster-recovery runbook</a> — RTO/RPO, incident-response playbook</li>
+<li><a href="pq-migration.md">Post-quantum migration</a> — ML-DSA/SLH-DSA assessment, whitepaper gap</li>
+<li><a href="decision-memo.md">Decision memo</a> — readiness assessment</li>
+<li><a href="claim-index.md">Claim index</a> — 37 claims with statuses and evidence</li>
+<li><a href="gap-register.md">Gap register</a> — 12 findings with remediations</li>
+<li><a href="risk-register.md">Risk register</a> — 14 risks</li>
+<li><a href="citations.md">Citations</a> — every source with file:line or URL</li>
+<li><a href="evidence-index.md">Evidence index</a> — every file and what it supports</li>
+</ul>
+
+<h2>Reproduction</h2>
+<p><code>bash scripts/clean_reproduce.sh</code> — fresh-environment check,
+exit 0. <code>bash scripts/verify_digests.sh</code> — verify SHA256SUMS.
+Full instructions in the README.</p>
+</body>
+</html>
